@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} | Activités+</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/clubs.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+
+    <style>
+        .form-container { max-width: 800px; margin: -60px auto 50px; background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); position: relative; z-index: 10; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 700; color: #2b2d42; }
+        .form-control { width: 100%; padding: 12px 15px; border: 2px solid #eee; border-radius: 12px; font-family: inherit; transition: 0.3s; font-size: 1rem; }
+        .form-control:focus { border-color: #f72585; outline: none; background: #fff0f6; }
+        
+        .btn-submit { background: #f72585; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer; width: 100%; transition: 0.3s; }
+        .btn-submit:hover { background: #d00060; transform: translateY(-2px); }
+        
+        .btn-cancel { display: flex; align-items: center; justify-content: center; background: #f8f9fa; color: #6c757d; text-decoration: none; padding: 15px; border-radius: 12px; font-weight: 700; width: 100%; transition: 0.3s; }
+        .btn-cancel:hover { background: #e9ecef; color: #2b2d42; }
+        
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 1rem; }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Activités<span>+</span></div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('admin_dashboard') }}">Tableau de Bord</a></li>
+            <li><a href="{{ url_for('logout') }}" style="color: var(--secondary); font-weight: 800;">Déconnexion</a></li>
+        </ul>
+    </nav>
+
+    <header class="page-header" style="padding-bottom: 100px; min-height: 280px; background: linear-gradient(135deg, #f72585, #7209b7);">
+        <h1><i class="fas fa-edit"></i> Modifier Activité Club</h1>
+        <p>Mise à jour : {{ activite.IntituleC }}</p>
+    </header>
+
+    <div class="form-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}" style="padding:15px; margin-bottom:20px; border-radius:10px; background:#eee;">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('modifier_activite_club', id=activite.CodeActiviteC) }}" method="POST">
+
+            <div class="form-group">
+                <label>Club Organisateur</label>
+                <input type="text" class="form-control" value="{{ activite.club.NomClub }}" disabled style="background: #f8f9fa; color: #666;">
+            </div>
+
+            <div class="form-group">
+                <label for="intitule">Intitulé de l'activité</label>
+                <input type="text" id="intitule" name="intitule" class="form-control" value="{{ activite.IntituleC }}" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                    <label for="date">Date</label>
+                    <input type="date" id="date" name="date" class="form-control" 
+                           value="{{ activite.DateActiviteC.strftime('%Y-%m-%d') }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="duree">Durée</label>
+                    <input type="text" id="duree" name="duree" class="form-control" 
+                           value="{{ activite.Duree }}" placeholder="Ex: 2h00">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="lieu">Lieu</label>
+                <input type="text" id="lieu" name="lieu" class="form-control" 
+                       value="{{ activite.Lieu }}" placeholder="Ex: Salle B12">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                    <label>Budget (DH)</label>
+                    <input type="number" name="budget" class="form-control" 
+                           value="{{ activite.Budget }}" placeholder="0.00" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Note (0-5)</label>
+                    <input type="number" name="rating" class="form-control" 
+                           value="{{ activite.Rating }}" min="0" max="5" placeholder="5">
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <a href="{{ url_for('gestion_activites_club') }}" class="btn-cancel">Annuler</a>
+                <button type="submit" class="btn-submit">Enregistrer les modifications</button>
+            </div>
+
+        </form>
+    </div>
+
+    <footer><p>&copy; 2025 Activités+ ENSA Khouribga.</p></footer>
+</body>
+</html>

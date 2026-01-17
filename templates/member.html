@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Étudiant | Activités+</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4361ee',
+                        secondary: '#3a0ca3',
+                        accent: '#f72585',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 min-h-screen font-sans">
+
+    <nav class="navbar">
+        <div class="logo">Activités<span>+</span></div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('homepage') }}" target="_blank">Accueil</a></li>
+            <li><a href="{{ url_for('clubs') }}" target="_blank">Nos Clubs</a></li>
+            <li><a href="#" class="active" style="color: var(--primary);">Mon Espace</a></li>
+            <li><a href="{{ url_for('logout') }}" style="color: var(--secondary); font-weight: 800;">Déconnexion</a></li>
+        </ul>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-100 h-fit lg:sticky lg:top-28">
+                <div class="text-center">
+                    <div class="w-24 h-24 bg-indigo-50 text-secondary rounded-full flex items-center justify-center mx-auto text-3xl font-black mb-4 uppercase shadow-inner">
+                        {{ etudiant.Prenom[0] }}{{ etudiant.Nom[0] }}
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-800">{{ etudiant.Prenom }} {{ etudiant.Nom }}</h3>
+                    <p class="text-primary font-bold text-sm uppercase tracking-wide mt-1">{{ etudiant.Filiere }}</p>
+                </div>
+                <div class="mt-8 space-y-4 text-sm text-slate-600 border-t border-slate-100 pt-6">
+                    <p class="flex items-center"><i class="fas fa-id-card w-6 text-indigo-300"></i> Code: #{{ etudiant.CodeEtudiant }}</p>
+                    <p class="flex items-center"><i class="fas fa-envelope w-6 text-indigo-300"></i> {{ etudiant.Email }}</p>
+                    <p class="flex items-center"><i class="fas fa-phone w-6 text-indigo-300"></i> {{ etudiant.Telephone }}</p>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2 space-y-8">
+                
+                <section>
+                    <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center uppercase tracking-wider">
+                        <i class="fas fa-users-viewfinder mr-2 text-primary"></i> Mes Clubs
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {% if etudiant.inscriptions|length > 0 %}
+                            {% for inscr in etudiant.inscriptions %}
+                            <div class="bg-white p-5 rounded-xl border-l-4 border-indigo-500 shadow-sm hover:shadow-md transition group">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="font-bold text-slate-800 text-lg">{{ inscr.club.NomClub }}</h4>
+                                        <span class="text-xs font-bold text-slate-400 uppercase">{{ inscr.club.TypeClub }}</span>
+                                    </div>
+                                    {% if inscr.Statut == 'valide' %}
+                                    <span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded text-[10px] font-bold border border-emerald-100">
+                                        <i class="fas fa-check-circle mr-1"></i> {{ inscr.TypeMembre }}
+                                    </span>
+                                    {% else %}
+                                    <span class="px-2 py-0.5 bg-amber-50 text-amber-600 rounded text-[10px] font-bold italic border border-amber-100 animate-pulse">
+                                        <i class="fas fa-clock mr-1"></i> Demande en attente
+                                    </span>
+                                    {% endif %}
+                                </div>
+                                
+                                {% if inscr.TypeMembre == 'President' %}
+                                <div class="mt-4 p-3 bg-slate-50 rounded-lg border border-slate-100">
+                                    <p class="text-[10px] font-black text-slate-500 mb-2 uppercase">
+                                        <i class="fas fa-crown text-amber-400 mr-1"></i> Zone Président
+                                    </p>
+                                    <form action="#" method="POST"> <textarea name="message" placeholder="Note pour l'admin..." class="w-full p-2 text-xs border border-slate-200 rounded focus:ring-1 focus:ring-primary outline-none h-16 resize-none bg-white"></textarea>
+                                        <button type="button" class="mt-2 w-full bg-slate-800 text-white text-[10px] py-1.5 rounded font-bold hover:bg-black transition">
+                                            ENVOYER RAPPORT
+                                        </button>
+                                    </form>
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="col-span-full p-8 text-center bg-white rounded-xl border-2 border-dashed border-slate-200">
+                                <p class="text-slate-400 font-medium">Vous n'êtes inscrit à aucun club.</p>
+                                <a href="{{ url_for('clubs') }}" target="_blank" class="text-primary text-sm font-bold hover:underline mt-2 inline-block">Découvrir les clubs</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </section>
+
+                <section>
+                    <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center uppercase tracking-wider">
+                        <i class="fas fa-calendar-check mr-2 text-primary"></i> Mes Événements
+                    </h3>
+                    <div class="space-y-4">
+                        {% if etudiant.participations|length > 0 %}
+                            {% for part in etudiant.participations %}
+                            <div class="bg-white p-4 rounded-xl shadow-sm flex items-center justify-between border border-slate-100 hover:border-primary/30 transition">
+                                <div class="flex items-center space-x-4">
+                                    <div class="bg-slate-100 p-3 rounded-lg text-center min-w-[70px]">
+                                        <span class="block text-xs font-bold text-slate-400 uppercase">{{ part.evenement.DateDebut.strftime('%b') }}</span>
+                                        <span class="block text-xl font-black text-slate-700">{{ part.evenement.DateDebut.strftime('%d') }}</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-800">{{ part.evenement.NomEvent }}</h4>
+                                        <p class="text-xs text-slate-500 font-medium"><i class="fas fa-map-marker-alt mr-1"></i> {{ part.evenement.LieuE }}</p>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-end gap-1">
+                                    {% if part.Statut == 'valide' %}
+                                    <span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded text-[10px] font-bold border border-emerald-100">
+                                        <i class="fas fa-check-circle mr-1"></i> {{ part.TypeMembre }}
+                                    </span>
+                                    {% else %}
+                                    <span class="px-2 py-0.5 bg-amber-50 text-amber-600 rounded text-[10px] font-bold italic border border-amber-100 animate-pulse">
+                                        <i class="fas fa-clock mr-1"></i> Demande en attente
+                                    </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="p-8 text-center bg-white rounded-xl border-2 border-dashed border-slate-200">
+                                <p class="text-slate-400 font-medium">Aucune participation à venir.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </section>
+
+            </div>
+        </div>
+
+        <div id="discover" class="mt-12 pt-8 border-t border-slate-200">
+            <h2 class="text-2xl font-black text-slate-800 mb-6 flex items-center">
+                <i class="fas fa-rocket mr-3 text-accent"></i> À découvrir
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <div class="space-y-4">
+                    <h3 class="font-bold text-slate-700 flex justify-between items-center">
+                        Clubs suggérés 
+                        <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full font-bold">{{ clubs_disponibles|length }}</span>
+                    </h3>
+                    <div class="space-y-3">
+                        {% for club in clubs_disponibles %}
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 flex justify-between items-center hover:shadow-md transition">
+                            <div>
+                                <p class="font-bold text-slate-800">{{ club.NomClub }}</p>
+                                <p class="text-xs text-slate-400 font-bold uppercase">{{ club.TypeClub }}</p>
+                            </div>
+                            <a href="{{ url_for('demander_inscription', etudiant_id=etudiant.CodeEtudiant, club_id=club.CodeClub) }}" class="bg-slate-100 text-slate-600 px-4 py-2 rounded-lg text-xs font-bold hover:bg-primary hover:text-white transition">
+                                Rejoindre
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="font-bold text-slate-700 flex justify-between items-center">
+                        Prochains événements
+                        <span class="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded-full font-bold">{{ events_disponibles|length }}</span>
+                    </h3>
+                    <div class="space-y-3">
+                        {% for ev in events_disponibles %}
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 flex justify-between items-center hover:shadow-md transition">
+                            <div class="flex items-center space-x-3">
+                                <div class="text-primary font-bold border-r border-slate-200 pr-3">
+                                    {{ ev.DateDebut.strftime('%d/%m') }}
+                                </div>
+                                <div>
+                                    <p class="font-bold text-slate-800 text-sm">{{ ev.NomEvent }}</p>
+                                    <p class="text-[10px] text-slate-400 font-bold uppercase">{{ ev.LieuE }}</p>
+                                </div>
+                            </div>
+                            <a href="{{ url_for('demander_participation', etudiant_id=etudiant.CodeEtudiant, event_id=ev.CodeEvent) }}" class="bg-primary/10 text-primary px-3 py-2 rounded-lg text-[10px] font-bold uppercase hover:bg-primary hover:text-white transition">
+                                Participer
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Activités+ ENSA Khouribga. Tous droits réservés.</p>
+    </footer>
+
+</body>
+</html>

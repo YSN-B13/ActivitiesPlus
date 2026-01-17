@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion | Activités+</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Nunito+Sans:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+
+<body class="login-page">
+    <nav class="navbar">
+        <div class="logo">Activités<span>+</span></div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('homepage') }}">Accueil</a></li>
+            <li><a href="{{ url_for('clubs') }}">Nos Clubs</a></li>
+            <li><a href="{{ url_for('login') }}" class="active">S'inscrire</a></li>
+        </ul>
+    </nav>
+
+    <main class="login-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            <i class="fas fa-{{ 'exclamation-circle' if category == 'error' else 'check-circle' if category == 'success' else 'exclamation-triangle' }}"></i>
+                            <span>{{ message }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <div class="login-card">
+            <div class="login-header">
+                <h2>Bon retour !</h2>
+                <p>Connectez-vous pour accéder à vos clubs</p>
+            </div>
+
+            <form action="/login" method="POST" class="login-form">
+                <div class="input-group">
+                    <label for="email">Adresse Email</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" name="email" placeholder="nom@ecole.com" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Mot de passe</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" name="password" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary full-width">Se connecter</button>
+
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Activités+ ENSA Khouribga. Tous droits réservés.</p>
+    </footer>
+</body>
+
+</html>

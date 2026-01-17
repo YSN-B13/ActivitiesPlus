@@ -1,0 +1,144 @@
+.clubs-container {
+    padding: 100px 8% 50px;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+.page-header {
+    background: linear-gradient(135deg, #3a0ca3, #4361ee);
+    color: #fff;
+    padding: 120px 8% 80px;
+    text-align: center;
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+}
+
+
+.club-section {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4rem;
+    margin: 4rem 0;
+    align-items: center;
+    background: #fff;
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.club-section.reverse {
+    direction: rtl;
+}
+
+.club-section.reverse .club-text,
+.club-section.reverse .club-visuals {
+    direction: ltr;
+}
+
+.club-badge {
+    display: inline-block;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #fff;
+}
+
+.jlm-color { background-color: #e63946; }
+.enactus-color { background-color: #ffb703; color: #333; }
+.masjid-color { background-color: #2a9d8f; }
+.esc-color { background-color: #264653; }
+.rotaract-color { background-color: #fbcfe8; color: #db2777}
+
+.club-text h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.motto {
+    display: block;
+    font-style: italic;
+    color: #f72585;
+    margin-bottom: 1rem;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 1rem;
+}
+
+.gallery-item {
+    height: 120px;
+    border-radius: 12px;
+    background-color: #e2e8f0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.gallery-item:first-child {
+    grid-column: span 2;
+    height: 200px;
+}
+
+.gallery-item::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 0.8rem;
+}
+
+.gallery-item:empty::before {
+    display: flex;
+}
+
+.section-divider {
+    border: none;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.05);
+    margin: 4rem 0;
+}
+
+@media (max-width: 992px) {
+    .club-section {
+        grid-template-columns: 1fr;
+        padding: 2rem;
+    }
+
+    .club-section.reverse {
+        direction: ltr;
+    }
+}
+
+/* JLM */
+.img-1 { background-image: url("Images/jlm1.jpeg"); }
+.img-2 { background-image: url("Images/jlm2.jpeg"); }
+.img-3 { background-image: url("Images/jlm3.jpeg"); }
+
+/* Enactus */
+.img-4 { background-image: url("Images/enactus1.jpeg"); }
+.img-5 { background-image: url("Images/enactus2.jpeg"); }
+.img-6 { background-image: url("Images/enactus3.jpeg"); }
+
+/* Masjid */
+.img-7 { background-image: url("Images/masjid1.jpeg"); }
+.img-8 { background-image: url("Images/masjid2.jpeg"); }
+.img-9 { background-image: url("Images/masjid3.jpeg"); }
+
+/* Rotaract */
+.img-10 { background-image: url("Images/rotaract1.jpeg"); }
+.img-11 { background-image: url("Images/rotaract2.jpeg"); }
+.img-12 { background-image: url("Images/rotaract3.jpeg"); }
+
+/* ESC */
+.img-13 { background-image: url("Images/esc1.jpeg"); }
+.img-14 { background-image: url("Images/esc2.jpeg"); }
+.img-15 { background-image: url("Images/esc3.jpeg"); }

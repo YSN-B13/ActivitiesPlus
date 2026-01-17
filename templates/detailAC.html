@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} | Activités+</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/clubs.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+
+    <style>
+        .detail-grid {
+            display: grid; grid-template-columns: 1fr 350px; gap: 2rem;
+            max-width: 1200px; margin: -60px auto 50px; padding: 0 20px; position: relative; z-index: 10;
+        }
+        .content-card {
+            background: white; padding: 2rem; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;
+        }
+        .section-title {
+            font-family: 'Montserrat', sans-serif; color: #f72585; font-size: 1.2rem;
+            margin-bottom: 1rem; border-bottom: 2px solid #fff0f6; padding-bottom: 0.5rem;
+        }
+        .meta-box {
+            background: #fdf2f8; border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem;
+            display: grid; gap: 10px; border: 1px solid #fce7f3;
+        }
+        .meta-item { display: flex; align-items: center; color: #555; }
+        .meta-item i { width: 30px; color: #f72585; }
+        
+        @media (max-width: 900px) { .detail-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Activités<span>+</span></div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('admin_dashboard') }}">Tableau de Bord</a></li>
+            <li><a href="{{ url_for('logout') }}" style="color: var(--secondary); font-weight: 800;">Déconnexion</a></li>
+        </ul>
+    </nav>
+
+    <header class="page-header" style="padding-bottom: 100px; min-height: 280px; background: linear-gradient(135deg, #f72585, #7209b7);">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between;">
+            <div>
+                <span class="tag" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white;">Activité Club</span>
+                <h1 style="margin-top: 10px;"><i class="fas fa-bullhorn"></i> {{ activite.IntituleC }}</h1>
+                <p>Organisé par : {{ activite.club.NomClub }}</p>
+            </div>
+            <a href="{{ url_for('gestion_activites_club') }}" style="background: rgba(255,255,255,0.2); color: white; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; height: fit-content;">
+                <i class="fas fa-arrow-left"></i> Retour
+            </a>
+        </div>
+    </header>
+
+    <div class="detail-grid">
+        
+        <main>
+            <div class="content-card">
+                <h3 class="section-title"><i class="fas fa-info-circle"></i> Détails</h3>
+                <p style="color: #666; line-height: 1.8; white-space: pre-line;">
+                    {{ activite.DescriptionC or "Aucune description fournie pour cette activité." }}
+                </p>
+                
+                <div class="meta-box">
+                    <div class="meta-item">
+                        <i class="far fa-calendar-alt"></i> 
+                        <strong>Date :</strong> &nbsp; {{ activite.DateActiviteC.strftime('%d %B %Y') }}
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-tag"></i> 
+                        <strong>Type :</strong> &nbsp; {{ activite.TypeActiviteC }}
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-users"></i> 
+                        <strong>Club :</strong> &nbsp; {{ activite.club.NomClub }}
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <aside>
+            <div class="content-card" style="text-align: center;">
+                <a href="{{ url_for('modifier_activite_club', id=activite.CodeActiviteC) }}" 
+                   style="display: block; background: #4361ee; color: white; padding: 12px; border-radius: 8px; font-weight: 700; text-decoration: none; margin-bottom: 10px;">
+                    <i class="fas fa-edit"></i> Modifier
+                </a>
+                <a href="{{ url_for('supprimer_activite_club', id=activite.CodeActiviteC) }}" 
+                   onclick="return confirm('⚠️ Supprimer cette activité ?');" 
+                   style="display: block; background: #fee2e2; color: #ef4444; padding: 12px; border-radius: 8px; font-weight: 700; text-decoration: none;">
+                    <i class="fas fa-trash"></i> Supprimer
+                </a>
+            </div>
+
+            <div class="content-card">
+                <h3 class="section-title"><i class="fas fa-link"></i> Lien Rapide</h3>
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">Voir le club organisateur :</p>
+                <a href="{{ url_for('detail_club', id=activite.club.CodeClub) }}" style="color: #f72585; font-weight: bold; text-decoration: none;">
+                    {{ activite.club.NomClub }} <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </aside>
+
+    </div>
+
+    <footer><p>&copy; 2025 Activités+ ENSA Khouribga.</p></footer>
+</body>
+</html>

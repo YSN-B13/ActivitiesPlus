@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} | Activités+</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/clubs.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+
+    <style>
+        /* REUSING DASHBOARD GRID LAYOUT */
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: -80px auto 50px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* SPONSOR IDENTITY CARD */
+        .profile-card {
+            background: white;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .avatar-circle {
+            width: 100px;
+            height: 100px;
+            background: #e6fffa;
+            color: #2a9d8f;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 25px rgba(42, 157, 143, 0.2);
+            border: 4px solid white;
+        }
+
+        .profile-name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            color: #2b2d42;
+            margin-bottom: 0.5rem;
+        }
+
+        .contribution-box {
+            margin-top: 2rem;
+            background: #f0fdfa;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #ccfbf1;
+        }
+
+        .contribution-label {
+            display: block;
+            font-size: 0.75rem;
+            color: #2a9d8f;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .contribution-value {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            color: #134e4a;
+            font-weight: 800;
+        }
+
+        /* ACTIONS */
+        .sidebar-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 2rem;
+        }
+
+        .btn-action {
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+        
+        .btn-edit { background: #e0e7ff; color: #4361ee; }
+        .btn-edit:hover { background: #4361ee; color: white; }
+        
+        .btn-delete { background: #fee2e2; color: #ef4444; }
+        .btn-delete:hover { background: #ef4444; color: white; }
+
+        /* CONTENT CARDS */
+        .content-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f8f9fa;
+        }
+
+        .card-header h3 {
+            font-family: 'Montserrat', sans-serif;
+            color: #264653;
+            font-size: 1.2rem;
+            margin: 0;
+        }
+
+        .card-header i { margin-right: 10px; color: #2a9d8f; font-size: 1.2rem; }
+
+        @media (max-width: 900px) {
+            .detail-grid { grid-template-columns: 1fr; }
+            .profile-card { position: static; margin-bottom: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Activités<span>+</span></div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('admin_dashboard') }}">Tableau de Bord</a></li>
+            <li><a href="{{ url_for('logout') }}" style="color: var(--secondary); font-weight: 800;">Déconnexion</a></li>
+        </ul>
+    </nav>
+
+    <header class="page-header" style="padding-bottom: 120px; background: linear-gradient(135deg, #2a9d8f, #264653);">
+        <h1><i class="fas fa-handshake"></i> Détail Sponsor</h1>
+        <p>Partenaire : #{{ sponsor.CodeSponsor }}</p>
+    </header>
+
+    <div class="detail-grid">
+        
+        <aside class="profile-card">
+            <div class="avatar-circle">
+                {{ sponsor.NomSponsor[0] }}
+            </div>
+            <h2 class="profile-name">{{ sponsor.NomSponsor }}</h2>
+            <span class="tag" style="background-color: #264653;">{{ sponsor.TypeSponsor }}</span>
+
+            <div class="contribution-box">
+                <span class="contribution-label">Contribution Totale</span>
+                <span class="contribution-value">{{ "{:,.0f}".format(sponsor.Contribution) }} <small style="font-size: 1rem;">DH</small></span>
+            </div>
+
+            <div class="sidebar-actions">
+                <a href="{{ url_for('modifier_sponsor', id=sponsor.CodeSponsor) }}" class="btn-action btn-edit">
+                    <i class="fas fa-pen"></i> Modifier
+                </a>
+                <a href="{{ url_for('supprimer_sponsor', id=sponsor.CodeSponsor) }}" class="btn-action btn-delete" onclick="return confirm('Attention : Supprimer ce sponsor ?');">
+                    <i class="fas fa-trash"></i> Supprimer
+                </a>
+            </div>
+            
+            <div style="margin-top: 15px;">
+                <a href="{{ url_for('gestion_sponsors') }}" style="font-size: 0.8rem; color: #6c757d; text-decoration: none; font-weight: 600;">
+                    <i class="fas fa-arrow-left"></i> Retour à la liste
+                </a>
+            </div>
+        </aside>
+
+        <main>
+            
+            <div class="content-card">
+                <div class="card-header">
+                    <i class="fas fa-users"></i>
+                    <h3>Clubs Sponsorisés</h3>
+                </div>
+
+                {% if clubs|length < 1 %}
+                    <div class="empty-state">
+                        <p>Ce partenaire ne sponsorise aucun club actuellement.</p>
+                    </div>
+                {% else %}
+                    <table style="margin: 0;">
+                        <thead>
+                            <tr>
+                                <th>Club</th>
+                                <th>Type</th>
+                                <th style="text-align: right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for club in clubs %}
+                            <tr>
+                                <td><strong>{{ club.NomClub }}</strong></td>
+                                <td>{{ club.TypeClub }}</td>
+                                <td style="text-align: right;">
+                                    <a href="{{ url_for('detail_club', id=club.CodeClub) }}" style="color: #4361ee; font-weight: 700; text-decoration: none; font-size: 0.85rem;">
+                                        Voir Club <i class="fas fa-arrow-right ml-1"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+
+            <div class="content-card">
+                <div class="card-header">
+                    <i class="fas fa-calendar-check"></i>
+                    <h3>Événements Financés</h3>
+                </div>
+
+                {% if evenements|length < 1 %}
+                    <div class="empty-state">
+                        <p>Aucun événement financé pour le moment.</p>
+                    </div>
+                {% else %}
+                    <table style="margin: 0;">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Événement</th>
+                                <th style="text-align: right;">Lieu</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ev in evenements %}
+                            <tr>
+                                <td style="color: #2a9d8f; font-weight: bold;">
+                                    {{ ev.DateDebut.strftime('%d/%m/%Y') }}
+                                </td>
+                                <td><strong>{{ ev.NomEvent }}</strong></td>
+                                <td style="text-align: right;">
+                                    {{ ev.LieuE }}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Activités+ ENSA Khouribga. Tous droits réservés.</p>
+    </footer>
+
+</body>
+</html>

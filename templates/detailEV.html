@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} | Activités+</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Nunito+Sans:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/clubs.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+
+    <style>
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: -60px auto 50px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .content-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            color: #3a0ca3;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #f0f4ff;
+            padding-bottom: 0.5rem;
+        }
+
+        .event-meta {
+            margin-top: 1rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            color: #555;
+        }
+
+        .meta-item i {
+            width: 30px;
+            color: #4361ee;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .badge-active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-pending {
+            background: #fffbeb;
+            color: #b45309;
+        }
+
+        @media (max-width: 900px) {
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .tag-role {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: #e0e7ff;
+            color: #4361ee;
+            font-weight: 700;
+        }
+
+        .tag-president {
+            background: #fee2e2;
+            color: #ef4444;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">Activités<span>+</span></div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('admin_dashboard') }}">Tableau de Bord</a></li>
+            <li><a href="{{ url_for('logout') }}" style="color: var(--secondary); font-weight: 800;">Déconnexion</a>
+            </li>
+        </ul>
+    </nav>
+
+    <header class="page-header"
+        style="padding-bottom: 100px; min-height: 280px; background: linear-gradient(135deg, #111, #4361ee);">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between;">
+            <div>
+                <span class="tag" style="background: #f72585;">{{ evenement.Filiere }}</span>
+                <h1 style="margin-top: 10px;"><i class="fas fa-calendar-star"></i> {{ evenement.NomEvent }}</h1>
+                <p>Thème : {{ evenement.Theme }}</p>
+            </div>
+            <a href="{{ url_for('gestion_evenements') }}"
+                style="background: rgba(255,255,255,0.2); color: white; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; height: fit-content;">
+                <i class="fas fa-arrow-left"></i> Retour
+            </a>
+        </div>
+    </header>
+
+    <div class="detail-grid">
+
+        <main>
+            <div class="content-card">
+                <h3 class="section-title"><i class="fas fa-info-circle"></i> À propos</h3>
+                <p style="color: #666; line-height: 1.8;">{{ evenement.DescriptionE }}</p>
+
+                <div class="event-meta">
+                    <div class="meta-item">
+                        <i class="far fa-calendar-alt"></i>
+                        <strong>Début :</strong> &nbsp; {{ evenement.DateDebut.strftime('%d %B %Y') }}
+                    </div>
+                    <div class="meta-item">
+                        <i class="far fa-calendar-check"></i>
+                        <strong>Fin :</strong> &nbsp; {{ evenement.DateFin.strftime('%d %B %Y') }}
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <strong>Lieu :</strong> &nbsp; {{ evenement.LieuE }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f0f4ff; margin-bottom: 1rem; padding-bottom: 0.5rem;">
+                    <h3 class="section-title" style="border:none; margin:0;"><i class="fas fa-users"></i> Participants
+                        ({{ participants|length }})</h3>
+
+                    <a href="{{ url_for('ajouter_participant_event', event_id=evenement.CodeEvent) }}"
+                        style="background: #4361ee; color: white; padding: 5px 15px; border-radius: 8px; font-size: 0.8rem; font-weight: bold; text-decoration: none;">
+                        <i class="fas fa-plus"></i> Ajouter
+                    </a>
+                </div>
+
+                {% if participants|length < 1 %} <p class="empty-state">Aucun participant inscrit.</p>
+                    {% else %}
+                    <table style="margin: 0;">
+                        <thead>
+                            <tr>
+                                <th>Étudiant</th>
+                                <th>Type</th>
+                                <th>Statut</th>
+                                <th style="text-align: right;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for part in participants %}
+                            <tr>
+                                <td><strong>{{ part.etudiant.Nom }} {{ part.etudiant.Prenom }}</strong></td>
+                                <td>
+                                    {% if part.TypeParticipant == 'President' %}
+                                    <span class="tag-role tag-president">{{ part.TypeParticipant}}</span>
+                                    {% else %}
+                                    <span class="tag-role">{{part.TypeParticipant}}</span>
+                                    {% endif %}
+                                <td>
+                                    {% if part.Statut == 'valide' %}
+                                    <span class="badge badge-active">Confirmé</span>
+                                    {% else %}
+                                    <span class="badge badge-pending">En attente</span>
+                                    <a href="{{ url_for('valider_participation', et_id=part.etudiant.CodeEtudiant, evt_id=evenement.CodeEvent) }}"
+                                        style="margin-left:5px;"><i class="fas fa-check" style="color:#10b981;"></i></a>
+                                    {% endif %}
+                                </td>
+                                <td style="text-align: right;">
+                                    <a href="{{ url_for('supprimer_participant_event', event_id=evenement.CodeEvent, et_id=part.etudiant.CodeEtudiant) }}"
+                                        onclick="return confirm('Retirer ce participant ?');"
+                                        style="color: #ef4444; text-decoration: none;" title="Retirer">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
+            </div>
+        </main>
+
+        <aside>
+            <div class="content-card" style="text-align: center;">
+                <a href="{{ url_for('modifier_evenement', id=evenement.CodeEvent) }}"
+                    style="display: block; background: #4361ee; color: white; padding: 12px; border-radius: 8px; font-weight: 700; text-decoration: none; margin-bottom: 10px;">
+                    <i class="fas fa-edit"></i> Modifier
+                </a>
+                <a href="{{ url_for('supprimer_evenement', id=evenement.CodeEvent) }}"
+                    onclick="return confirm('⚠️ Êtes-vous sûr ? Tout l\'historique sera effacé !');"
+                    style="display: block; background: #fee2e2; color: #ef4444; padding: 12px; border-radius: 8px; font-weight: 700; text-decoration: none;">
+                    <i class="fas fa-trash"></i> Supprimer
+                </a>
+            </div>
+
+            <div class="content-card">
+                <h3 class="section-title"><i class="fas fa-bolt"></i> Programme</h3>
+                {% if activites|length < 1 %} <p style="font-size: 0.9rem; color: #aaa;">Aucune activité détaillée.</p>
+                    {% else %}
+                    <ul style="list-style: none; padding: 0;">
+                        {% for act in activites %}
+                        <li style="padding: 10px 0; border-bottom: 1px solid #eee;">
+                            <strong style="color: #333;">{{ act.IntituleE }}</strong><br>
+                            <span style="font-size: 0.8rem; color: #888;">{{ act.TypeActiviteE }} • {{ act.Duree
+                                }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+            </div>
+
+            <div class="content-card">
+                <h3 class="section-title"><i class="fas fa-hand-holding-usd"></i> Sponsors</h3>
+                {% if sponsors|length < 1 %} <p style="font-size: 0.9rem; color: #aaa;">Aucun sponsor.</p>
+                    {% else %}
+                    <ul style="list-style: none; padding: 0;">
+                        {% for sp in sponsors %}
+                        <li
+                            style="padding: 10px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;">
+                            <span>{{ sp.NomSponsor }}</span>
+                            <span style="color: #10b981; font-weight: 700;">{{ sp.Contribution }} DH</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+            </div>
+        </aside>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Activités+ ENSA Khouribga.</p>
+    </footer>
+</body>
+
+</html>

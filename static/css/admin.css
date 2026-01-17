@@ -1,0 +1,166 @@
+body {
+    min-height: 100vh;      /* 100% of Viewport Height */
+    display: flex;          /* Enable Flexbox layout */
+    flex-direction: column; /* Stack elements vertically */
+}
+
+/* --- CONTAINER STYLES --- */
+.table-container {
+    max-width: 1200px;
+    margin: -80px auto 50px; 
+    padding: 3rem;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 10;
+}
+
+.table-container h2 {
+    font-family: 'Montserrat', sans-serif;
+    color: #3a0ca3; /* Primary Dark */
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    border-bottom: 2px solid #f8f9fa;
+    padding-bottom: 1rem;
+}
+
+/* --- TABLE STYLES --- */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 10px;
+}
+
+th {
+    background-color: #f0f4ff;
+    color: #3a0ca3;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    padding: 18px 20px;
+    text-align: left;
+    border-bottom: 3px solid #4361ee; /* Primary Blue */
+}
+
+th:first-child { border-top-left-radius: 12px; }
+th:last-child { border-top-right-radius: 12px; }
+
+td {
+    padding: 18px 20px;
+    border-bottom: 1px solid #eee;
+    color: #2b2d42;
+    font-size: 0.95rem;
+    vertical-align: middle;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:hover td {
+    background-color: #fafbff;
+    transition: background-color 0.2s ease;
+}
+
+/* --- TAGS & BADGES --- */
+.tag {
+    background-color: #4cc9f0; /* Accent Blue */
+    color: white;
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: inline-block;
+    box-shadow: 0 4px 10px rgba(76, 201, 240, 0.2);
+}
+
+strong {
+    color: #3a0ca3;
+    font-weight: 700;
+}
+
+/* --- EMPTY STATE --- */
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* --- FOOTER ADJUSTMENT --- */
+footer {
+    background: #111;
+    color: #555;
+    padding: 40px;
+    text-align: center;
+    margin-top: auto; /* <--- THIS MAGIC LINE PUSHES IT DOWN */
+}
+
+/* --- STATISTICS GRID --- */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: -60px auto 40px; /* Overlaps header */
+    padding: 0 20px;
+    position: relative;
+    z-index: 20;
+}
+
+.stat-card {
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-number {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #4361ee; /* Primary Blue */
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    color: #6c757d;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- ADJUST TABLES --- */
+.table-section {
+    max-width: 1200px;
+    margin: 0 auto 50px; /* Space between tables */
+    padding: 0 20px;
+}
+
+/* Reuse existing container style but reset margin for multiple tables */
+.table-container {
+    margin: 0; 
+    background: white;
+    border-radius: 20px;
+    padding: 3rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+    color: #3a0ca3;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f0f4ff;
+    font-family: 'Montserrat', sans-serif;
+}

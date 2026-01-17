@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} | Activités+</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+
+    <style>
+        :root {
+            --primary: #4361ee;
+            --accent: #f72585;
+            --bg-light: #f8f9fa;
+            --text-dark: #2b2d42;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            font-family: 'Nunito Sans', sans-serif;
+        }
+
+
+
+        /* --- HEADER --- */
+        .page-header {
+            background: linear-gradient(135deg, #1e1e2f, #3b3b58);
+            padding: 120px 0 100px;
+            text-align: center;
+            color: white;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+        .page-header h1 { font-family: 'Montserrat'; font-size: 2.5rem; margin-bottom: 10px; }
+        .page-header p { font-size: 1.1rem; opacity: 0.8; }
+
+        /* --- SEARCH CARD --- */
+        .search-container {
+            max-width: 1000px;
+            margin: -80px auto 40px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-panel {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .search-main-row {
+            display: grid;
+            grid-template-columns: 200px 1fr 150px;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .custom-select-wrapper, .search-input-wrapper {
+            position: relative;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: 0.3s;
+            background: #fff;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.1);
+        }
+
+        .btn-search {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-search:hover { background: #3a0ca3; transform: translateY(-2px); }
+
+        /* --- FILTERS SECTION --- */
+        .advanced-filters {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px dashed #ced4da;
+        }
+        
+        .filters-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #adb5bd;
+            font-weight: 800;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .control-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+        .control-label i { color: var(--secondary); margin-right: 5px; }
+
+        /* --- RESULTS TABLE --- */
+        .results-section { max-width: 1000px; margin: 0 auto 50px; padding: 0 20px; }
+        
+        .modern-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px; /* Gap between rows */
+        }
+
+        .modern-table thead th {
+            text-align: left;
+            padding: 15px;
+            color: #6c757d;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .modern-table tbody tr {
+            background: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            transition: 0.2s;
+        }
+
+        .modern-table tbody tr:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .modern-table td {
+            padding: 20px 15px;
+            border-top: 1px solid #f1f3f5;
+            border-bottom: 1px solid #f1f3f5;
+        }
+        
+        .modern-table td:first-child { border-left: 1px solid #f1f3f5; border-top-left-radius: 10px; border-bottom-left-radius: 10px; }
+        .modern-table td:last-child { border-right: 1px solid #f1f3f5; border-top-right-radius: 10px; border-bottom-right-radius: 10px; }
+
+        .btn-view {
+            color: var(--primary);
+            background: #e0e7ff;
+            padding: 8px 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: 0.2s;
+        }
+        .btn-view:hover { background: var(--primary); color: white; }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px;
+            color: #adb5bd;
+        }
+        .empty-state i { font-size: 4rem; margin-bottom: 20px; opacity: 0.5; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .search-main-row { grid-template-columns: 1fr; }
+            .page-header h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Activités<span>+</span></div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('admin_dashboard') }}">Tableau de Bord</a></li>
+            <li><a href="{{ url_for('logout') }}" style="color: var(--secondary); font-weight: 800;">Déconnexion</a>
+        </ul>
+    </nav>
+
+    <header class="page-header">
+        <h1>Recherche Avancée</h1>
+        <p>Explorez la base de données avec des filtres précis et des jointures</p>
+    </header>
+
+    <div class="search-container">
+        <form action="{{ url_for('recherche_avancee') }}" method="POST" class="search-panel">
+            
+            <div class="search-main-row">
+                <div class="custom-select-wrapper">
+                    <select name="type" class="form-control" onchange="this.form.submit()" style="cursor: pointer; font-weight: bold; color: #4361ee;">
+                        <option value="etudiant" {% if type_recherche == 'etudiant' %}selected{% endif %}>👤 Étudiants</option>
+                        <option value="club" {% if type_recherche == 'club' %}selected{% endif %}>🏆 Clubs</option>
+                        <option value="evenement" {% if type_recherche == 'evenement' %}selected{% endif %}>📅 Événements</option>
+                        <option value="sponsor" {% if type_recherche == 'sponsor' %}selected{% endif %}>🤝 Sponsors</option>
+                        <option value="intervenant" {% if type_recherche == 'intervenant' %}selected{% endif %}>🎤 Intervenants</option>
+                    </select>
+                </div>
+
+                <div class="search-input-wrapper">
+                    <input type="text" name="terme" class="form-control" placeholder="Mots-clés (Nom, Thème, Email...)" value="{{ terme }}">
+                </div>
+
+                <button type="submit" class="btn-search">
+                    <i class="fas fa-search"></i> Chercher
+                </button>
+            </div>
+
+            {% if type_recherche in ['etudiant', 'evenement', 'sponsor', 'club'] %}
+            <div class="advanced-filters">
+                <span class="filters-label"><i class="fas fa-sliders-h"></i> Filtres Spécifiques : {{ type_recherche|capitalize }}</span>
+                
+                <div class="filter-grid">
+                    {% if type_recherche == 'etudiant' %}
+                        <div>
+                            <label class="control-label"><i class="fas fa-users"></i> Membre du Club</label>
+                            <input type="text" name="club_filter" class="form-control" placeholder="Ex: Robotique..." value="{{ filtre_club or '' }}" style="font-size: 0.9rem;">
+                        </div>
+                        <div>
+                            <label class="control-label"><i class="fas fa-filter"></i> Exclusion</label>
+                            <select name="exclude_active" class="form-control" style="font-size: 0.9rem;">
+                                <option value="">-- Tout afficher --</option>
+                                <option value="sans_club" {% if filtre_exclure == 'sans_club' %}selected{% endif %}>Étudiants SANS Club (Non inscrits)</option>
+                            </select>
+                        </div>
+
+                    {% elif type_recherche == 'evenement' %}
+                        <div>
+                            <label class="control-label"><i class="far fa-calendar-alt"></i> À partir du</label>
+                            <input type="date" name="date_min" class="form-control" value="{{ filtre_date or '' }}">
+                        </div>
+
+                    {% elif type_recherche == 'sponsor' %}
+                        <div>
+                            <label class="control-label"><i class="fas fa-coins"></i> Contribution Min (DH)</label>
+                            <input type="number" name="budget_min" class="form-control" placeholder="Ex: 5000" value="{{ filtre_budget or '' }}">
+                        </div>
+                    
+                    {% elif type_recherche == 'club' %}
+                        <div>
+                            <label class="control-label"><i class="fas fa-search"></i> Chercher par Membre</label>
+                            <input type="text" name="terme" class="form-control" placeholder="Format: etudiant:Nom" value="{{ terme }}">
+                            <small style="color:#888;">Utilisez le format "etudiant:Nom" pour trouver les clubs d'un élève.</small>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+        </form>
+    </div>
+
+    <div class="results-section">
+        {% if resultats|length > 0 %}
+            <div style="margin-bottom: 20px; color: #6c757d; font-weight: 700;">
+                <i class="fas fa-check-circle" style="color: #10b981;"></i> {{ resultats|length }} résultat(s) trouvé(s)
+            </div>
+
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        {% if type_recherche == 'etudiant' %}
+                            <th>Nom Complet</th> <th>Filière</th> <th>Email</th>
+                        {% elif type_recherche == 'club' %}
+                            <th>Club</th> <th>Type</th> <th>Actions</th>
+                        {% elif type_recherche == 'evenement' %}
+                            <th>Événement</th> <th>Date</th> <th>Thème</th>
+                        {% elif type_recherche == 'sponsor' %}
+                            <th>Sponsor</th> <th>Type</th> <th>Montant</th>
+                        {% elif type_recherche == 'intervenant' %}
+                            <th>Nom Complet</th> <th>Spécialité</th> <th>Email</th>
+                        {% endif %}
+                        <th style="text-align: right;">Détails</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in resultats %}
+                    <tr>
+                        {% if type_recherche == 'etudiant' %}
+                            <td><strong>{{ r.Nom }} {{ r.Prenom }}</strong></td>
+                            <td><span style="background:#e0e7ff; color:#4361ee; padding:4px 8px; border-radius:4px; font-size:0.8rem; font-weight:bold;">{{ r.Filiere }}</span></td>
+                            <td style="color:#666;">{{ r.Email }}</td>
+                            <td style="text-align: right;"><a href="{{ url_for('detail_etudiant', id=r.CodeEtudiant) }}" class="btn-view">Voir Profil</a></td>
+                        
+                        {% elif type_recherche == 'club' %}
+                            <td><strong>{{ r.NomClub }}</strong></td>
+                            <td>{{ r.TypeClub }}</td>
+                            <td>-</td>
+                            <td style="text-align: right;"><a href="{{ url_for('detail_club', id=r.CodeClub) }}" class="btn-view">Voir Club</a></td>
+
+                        {% elif type_recherche == 'evenement' %}
+                            <td><strong>{{ r.NomEvent }}</strong></td>
+                            <td>{{ r.DateDebut.strftime('%d/%m/%Y') }}</td>
+                            <td>{{ r.Theme }}</td>
+                            <td style="text-align: right;"><a href="{{ url_for('detail_evenement', id=r.CodeEvent) }}" class="btn-view">Gérer</a></td>
+                        
+                        {% elif type_recherche == 'sponsor' %}
+                            <td><strong>{{ r.NomSponsor }}</strong></td>
+                            <td>{{ r.TypeSponsor }}</td>
+                            <td style="color:#10b981; font-weight:800;">{{ "{:,.0f}".format(r.Contribution) }} DH</td>
+                            <td style="text-align: right;"><a href="{{ url_for('detail_sponsor', id=r.CodeSponsor) }}" class="btn-view">Contrat</a></td>
+
+                        {% elif type_recherche == 'intervenant' %}
+                            <td><strong>{{ r.NomIN }} {{ r.PrenomIN }}</strong></td>
+                            <td>{{ r.Specialite }}</td>
+                            <td>{{ r.EmailIN }}</td>
+                            <td style="text-align: right;"><a href="{{ url_for('detail_intervenant', id=r.CodeIntervenant) }}" class="btn-view">Voir</a></td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            {% if terme or filtre_club or filtre_budget or filtre_date %}
+                <div class="empty-state">
+                    <i class="fas fa-search"></i>
+                    <h3>Aucun résultat trouvé</h3>
+                    <p>Essayez de modifier vos critères de recherche ou vérifiez l'orthographe.</p>
+                </div>
+            {% else %}
+                 <div class="empty-state">
+                    <i class="fas fa-rocket" style="color: #4361ee;"></i>
+                    <h3>Prêt à chercher</h3>
+                    <p>Sélectionnez une catégorie et entrez un mot-clé pour commencer.</p>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <footer style="text-align: center; padding: 40px; color: #adb5bd; font-size: 0.9rem;">
+        <p>&copy; 2025 Activités+ ENSA Khouribga. Tous droits réservés.</p>
+    </footer>
+
+</body>
+</html>

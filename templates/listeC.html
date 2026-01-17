@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} | Activités+</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/clubs.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Activités<span>+</span></div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('admin_dashboard') }}">Tableau de Bord</a></li>
+            <li><a href="{{ url_for('logout') }}" style="color: var(--secondary); font-weight: 800;">Déconnexion</a></li>
+        </ul>
+    </nav>
+
+    <header class="page-header" style="padding-bottom: 80px; min-height: 250px;">
+        <h1><i class="fas fa-users"></i> {{ title }}</h1>
+        <p>Supervision des clubs et associations</p>
+    </header>
+
+    <div class="table-section" style="margin-top: -60px; position: relative; z-index: 10;">
+        <div class="table-container">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <a href="{{ url_for('admin_dashboard') }}" style="text-decoration: none; color: #6c757d; font-weight: 700;">
+                    <i class="fas fa-arrow-left"></i> Retour
+                </a>
+                <button style="background: var(--secondary); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer;">
+                    <a href="{{ url_for('ajouter_club') }}" style="text-decoration: none; color: white; font-weight: 700;">
+                        <i class="fas fa-plus"></i> Créer un Club
+                    </a>
+                </button>
+            </div>
+
+            {% if clubs|length < 1 %}
+                <p class="empty-state">Aucun club trouvé.</p>
+            {% else %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom du Club</th>
+                            <th>Type</th>
+                            <th>Date Création</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for club in clubs %}
+                        <tr>
+                            <td>#{{ club.CodeClub }}</td>
+                            <td><strong>{{ club.NomClub }}</strong></td>
+                            <td><span class="tag">{{ club.TypeClub }}</span></td>
+                            <td>{{ club.DateCreation.strftime('%Y-%m-%d') }}</td>
+                            <td>
+                                <a href="{{ url_for('detail_club', id=club.CodeClub) }}" style="color: #6c757d; margin-right: 10px;"><i class="fas fa-eye"></i></a>
+                                <a href="{{ url_for('modifier_club', id=club.CodeClub) }}" style="color: #4361ee; margin-right: 10px;"><i class="fas fa-edit"></i></a>
+                                <a href="{{ url_for('supprimer_club', id=club.CodeClub) }}" style="color: #ef4444;"><i class="fas fa-trash"></i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Activités+ ENSA Khouribga. Tous droits réservés.</p>
+    </footer>
+
+</body>
+</html>

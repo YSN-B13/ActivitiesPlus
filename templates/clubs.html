@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nos Clubs | Activités+</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/clubs.css') }}">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">Activités<span>+</span></div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('homepage') }}">Accueil</a></li>
+            <li><a href="{{ url_for('clubs') }}" class="active">Nos Clubs</a></li>
+            <li><a href="{{ url_for('login') }}">S'inscrire</a></li>
+        </ul>
+    </nav>
+
+    <header class="page-header">
+        <h1>Vie Associative</h1>
+        <p>Découvrez les clubs qui font battre le cœur de l'ENSA Khouribga.</p>
+    </header>
+
+    <main class="clubs-container">
+        <section class="club-section" id="jlm">
+            <div class="club-text">
+                <div class="club-badge jlm-color">Social & Solidaire</div>
+                <h2>Jeunes Leaders Marocains</h2>
+                <p class="motto">« SPREADING HOPE, SPREADING JLM »</p>
+                <p>JLM ENSA Khouribga forme des étudiants ingénieurs à la création et gestion de projets générateurs de revenus au profit des populations dans le besoin.</p>
+                <div class="mission-box">
+                    <h4>Missions</h4>
+                    <ul>
+                        <li><i class="fas fa-check"></i> Développer l’esprit entrepreneurial.</li>
+                        <li><i class="fas fa-check"></i> Renforcer les principes de solidarité.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="club-visuals">
+                <div class="gallery-grid">
+                    <div class="gallery-item img-1"></div>
+                    <div class="gallery-item img-2"></div>
+                    <div class="gallery-item img-3"></div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="section-divider">
+
+        <section class="club-section reverse" id="enactus">
+            <div class="club-text">
+                <div class="club-badge enactus-color">Entrepreneuriat Social</div>
+                <h2>Enactus</h2>
+                <p>ONG internationale créée en 1975, Enactus accompagne les étudiants dans la mise en œuvre de projets d’entrepreneuriat social à travers des concours nationaux.</p>
+                <div class="vm-grid">
+                    <div class="vm-card"><strong>Vision :</strong> Un monde où les leaders s'engagent pour le progrès sociétal.</div>
+                </div>
+            </div>
+            <div class="club-visuals">
+                <div class="gallery-grid">
+                    <div class="gallery-item img-4"></div>
+                    <div class="gallery-item img-5"></div>
+                    <div class="gallery-item img-6"></div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="section-divider">
+
+        <section class="club-section" id="masjid">
+            <div class="club-text">
+                <div class="club-badge masjid-color">Communauté & Spiritualité</div>
+                <h2>Comité MASJID</h2>
+                <p>Le Comité Masjid est un environnement de partage d’idées pour construire le côté professionnel, personnel et spirituel de l’élève ingénieur.</p>
+            </div>
+            <div class="club-visuals">
+                <div class="gallery-grid">
+                    <div class="gallery-item img-7"></div>
+                    <div class="gallery-item img-8"></div>
+                    <div class="gallery-item img-9"></div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="section-divider">
+
+        <section class="club-section reverse" id="rotaract">
+            <div class="club-text">
+                <div class="club-badge rotaract-color">Engagement & Citoyenneté</div>
+                <h2>Comité Rotaract</h2>
+                <p>Le Comité Rotaract de l’ENSAK est dédié à l’engagement civique et au développement communautaire, en mobilisant les étudiants autour de projets à impact social.</p>
+            </div>
+            <div class="club-visuals">
+                <div class="gallery-grid">
+                    <div class="gallery-item img-10"></div>
+                    <div class="gallery-item img-11"></div>
+                    <div class="gallery-item img-12"></div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="section-divider">
+
+        <section class="club-section" id="esc">
+            <div class="club-text">
+                <div class="club-badge esc-color">Sport & Bien-être</div>
+                <h2>Comité Sportif</h2>
+                <p>Créé en 2015, le Comité Sportif de l’ENSAK œuvre pour la promotion du sport et du bien-être au sein de la communauté estudiantine, en encourageant un mode de vie sain, l’esprit d’équipe et l’engagement à travers diverses activités sportives.</p>
+            </div>
+            <div class="club-visuals">
+                <div class="gallery-grid">
+                    <div class="gallery-item img-13"></div>
+                    <div class="gallery-item img-14"></div>
+                    <div class="gallery-item img-15"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Activités+ ENSA Khouribga. Tous droits réservés.</p>
+    </footer>
+</body>
+</html>

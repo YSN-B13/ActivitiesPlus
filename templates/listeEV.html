@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} | Activités+</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/clubs.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Activités<span>+</span></div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('admin_dashboard') }}">Tableau de Bord</a></li>
+            <li><a href="{{ url_for('logout') }}" style="color: var(--secondary); font-weight: 800;">Déconnexion</a></li>
+        </ul>
+    </nav>
+
+    <header class="page-header" style="padding-bottom: 80px; min-height: 250px;">
+        <h1><i class="fas fa-calendar-alt"></i> {{ title }}</h1>
+        <p>Planning et organisation des événements</p>
+    </header>
+
+    <div class="table-section" style="margin-top: -60px; position: relative; z-index: 10;">
+        <div class="table-container">
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <a href="{{ url_for('admin_dashboard') }}" style="text-decoration: none; color: #6c757d; font-weight: 700;">
+                    <i class="fas fa-arrow-left"></i> Retour
+                </a>
+                
+                <a href="{{ url_for('ajouter_evenement') }}" 
+                   style="background: #3a0ca3; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-block;">
+                    <i class="fas fa-plus"></i> Nouvel Événement
+                </a>
+            </div>
+
+            {% if evenements|length < 1 %} 
+                <p class="empty-state">Aucun événement trouvé.</p>
+            {% else %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom Event</th>
+                            <th>Thème</th>
+                            <th>Date / Lieu</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ev in evenements %}
+                        <tr>
+                            <td>#{{ ev.CodeEvent }}</td>
+                            <td>
+                                <strong>{{ ev.NomEvent }}</strong>
+                                <br><span class="tag" style="font-size: 0.65rem; background-color: #f72585;">{{ ev.Filiere }}</span>
+                            </td>
+                            <td>{{ ev.Theme }}</td>
+                            <td>
+                                <i class="far fa-clock"></i> {{ ev.DateDebut.strftime('%d/%m/%Y') }}<br>
+                                <i class="fas fa-map-marker-alt"></i> {{ ev.LieuE }}
+                            </td>
+                            <td>
+                                <a href="{{ url_for('detail_evenement', id=ev.CodeEvent) }}"
+                                   style="color: #2a9d8f; margin-right: 10px;" title="Voir Détails">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                <a href="{{ url_for('modifier_evenement', id=ev.CodeEvent) }}"
+                                   style="color: #4361ee; margin-right: 10px;" title="Modifier">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                
+                                <a href="{{ url_for('supprimer_evenement', id=ev.CodeEvent) }}" 
+                                   style="color: #ef4444;" title="Supprimer"
+                                   onclick="return confirm('⚠️ Êtes-vous sûr de vouloir supprimer cet événement ?\n\nCela effacera également les participations et activités associées.');">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Activités+ ENSA Khouribga. Tous droits réservés.</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }} | Activités+</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/clubs.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Activités<span>+</span></div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('admin_dashboard') }}">Tableau de Bord</a></li>
+            <li><a href="{{ url_for('logout') }}" style="color: var(--secondary); font-weight: 800;">Déconnexion</a></li>
+        </ul>
+    </nav>
+
+    <header class="page-header" style="padding-bottom: 80px; min-height: 250px; background: linear-gradient(135deg, #7209b7, #480ca8);">
+        <h1><i class="fas fa-user-tie"></i> Gestion Intervenants</h1>
+        <p>Experts, invités et conférenciers</p>
+    </header>
+
+    <div class="table-section" style="margin-top: -60px; position: relative; z-index: 10;">
+        <div class="table-container">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <a href="{{ url_for('admin_dashboard') }}" style="text-decoration: none; color: #6c757d; font-weight: 700;">
+                    <i class="fas fa-arrow-left"></i> Retour
+                </a>
+                <a href="{{ url_for('ajouter_intervenant') }}" style="background: #7209b7; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; text-decoration: none; display: inline-block;">
+                    <i class="fas fa-plus"></i> Nouvel Intervenant
+                </a>
+            </div>
+
+            {% if intervenants|length < 1 %}
+                <p class="empty-state">Aucun intervenant enregistré.</p>
+            {% else %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nom Complet</th>
+                            <th>Spécialité</th>
+                            <th>Contact</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in intervenants %}
+                        <tr>
+                            <td>
+                                <strong>{{ i.NomIN }} {{ i.PrenomIN }}</strong>
+                            </td>
+                            <td><span class="tag" style="background: #f3e8ff; color: #6b21a8;">{{ i.Specialite }}</span></td>
+                            <td>
+                                <div style="font-size: 0.9rem;">
+                                    <i class="fas fa-envelope" style="color: #aaa; width: 20px;"></i> {{ i.EmailIN }}<br>
+                                    <i class="fas fa-phone" style="color: #aaa; width: 20px;"></i> {{ i.TelephoneIN }}
+                                </div>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('detail_intervenant', id=i.CodeIntervenant) }}" style="color: #2a9d8f; margin-right: 10px;"><i class="fas fa-eye"></i></a>
+                                <a href="{{ url_for('modifier_intervenant', id=i.CodeIntervenant) }}" style="color: #4361ee; margin-right: 10px;"><i class="fas fa-edit"></i></a>
+                                <a href="{{ url_for('supprimer_intervenant', id=i.CodeIntervenant) }}" style="color: #ef4444;" onclick="return confirm('Supprimer cet intervenant ?');"><i class="fas fa-trash"></i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+
+    <footer><p>&copy; 2025 Activités+ ENSA Khouribga.</p></footer>
+</body>
+</html>

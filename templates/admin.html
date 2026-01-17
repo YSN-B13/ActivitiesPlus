@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Activités+</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Activités<span>+</span></div>
+        <ul class="nav-links">
+            <li><a href="#etudiants">Étudiants</a></li>
+            <li><a href="#clubs">Clubs</a></li>
+            <li><a href="#events">Événements</a></li>
+            <li><a href="{{ url_for('logout') }}" style="color: #f72585; font-weight: 800;">Déconnexion</a></li>
+        </ul>
+    </nav>
+
+    <header class="page-header" style="padding-bottom: 100px;">
+        <h1>🎓 Administration ENSA</h1>
+        <p>Vue d'ensemble et statistiques</p>
+    </header>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <span class="stat-number">{{ stats.count_etudiants }}</span>
+            <span class="stat-label">Étudiants</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number">{{ stats.count_clubs }}</span>
+            <span class="stat-label">Clubs Actifs</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number">{{ stats.count_events }}</span>
+            <span class="stat-label">Événements</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number" style="color: #2a9d8f;">{{ stats.total_budget }}</span>
+            <span class="stat-label">Budget Sponsors (DH)</span>
+        </div>
+    </div>
+
+    <div class="table-section" id="clubs">
+        <div class="table-container">
+            <h2 class="section-title">📂 Gestion des Clubs</h2>
+            {% if clubs|length < 1 %}
+                <p class="empty-state">Aucun club trouvé.</p>
+            {% else %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Nom du Club</th>
+                            <th>Type</th>
+                            <th>Date Création</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for club in clubs %}
+                        <tr>
+                            <td>#{{ club.CodeClub }}</td>
+                            <td><strong>{{ club.NomClub }}</strong></td>
+                            <td><span class="tag">{{ club.TypeClub }}</span></td>
+                            <td>{{ club.DateCreation.strftime('%Y-%m-%d') }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="table-section" id="events">
+        <div class="table-container">
+            <h2 class="section-title">📅 Événements & Activités</h2>
+            {% if events|length < 1 %}
+                <p class="empty-state">Aucun événement trouvé.</p>
+            {% else %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Nom Event</th>
+                            <th>Thème</th>
+                            <th>Date Début</th>
+                            <th>Lieu</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for event in events %}
+                        <tr>
+                            <td>#{{ event.CodeEvent }}</td>
+                            <td><strong>{{ event.NomEvent }}</strong></td>
+                            <td>{{ event.Theme }}</td>
+                            <td>{{ event.DateDebut.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ event.LieuE }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="table-section" id="sponsors">
+        <div class="table-container">
+            <h2 class="section-title">💎 Sponsors & Partenaires</h2>
+            {% if sponsors|length < 1 %}
+                <p class="empty-state">Aucun sponsor enregistré.</p>
+            {% else %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom Sponsor</th>
+                            <th>Type</th>
+                            <th>Contribution (DH)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sponsor in sponsors %}
+                        <tr>
+                            <td>#{{ sponsor.CodeSponsor }}</td>
+                            <td><strong>{{ sponsor.NomSponsor }}</strong></td>
+                            <td>{{ sponsor.TypeSponsor }}</td>
+                            <td style="color: #2a9d8f; font-weight: bold;">{{ sponsor.Contribution }} DH</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="table-section" id="intervenants">
+        <div class="table-container">
+            <h2 class="section-title">🎤 Intervenants</h2>
+            {% if intervenants|length < 1 %}
+                <p class="empty-state">Aucun intervenant.</p>
+            {% else %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom Complet</th>
+                            <th>Spécialité</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for inter in intervenants %}
+                        <tr>
+                            <td>#{{ inter.CodeIntervenant }}</td>
+                            <td><strong>{{ inter.NomIN }} {{ inter.PrenomIN }}</strong></td>
+                            <td>{{ inter.Specialite }}</td>
+                            <td>{{ inter.EmailIN }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="table-section" id="etudiants">
+        <div class="table-container">
+            <h2 class="section-title">👥 Liste des Étudiants</h2>
+            {% if etudiants|length < 1 %}
+                <div class="empty-state">
+                    <p>Aucun étudiant trouvé.</p>
+                </div>
+            {% else %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom Complet</th>
+                            <th>Filière</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for etudiant in etudiants %}
+                        <tr>
+                            <td>#{{ etudiant.CodeEtudiant }}</td>
+                            <td><strong>{{ etudiant.Nom }} {{ etudiant.Prenom }}</strong></td>
+                            <td><span class="tag" style="background-color: #3a0ca3;">{{ etudiant.Filiere }}</span></td>
+                            <td>{{ etudiant.Email }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Activités+ ENSA Khouribga. Tous droits réservés.</p>
+    </footer>
+
+</body>
+</html>

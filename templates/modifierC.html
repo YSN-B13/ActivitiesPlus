@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} | Activités+</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/clubs.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+
+    <style>
+        .form-container {
+            max-width: 800px;
+            margin: -60px auto 50px;
+            background: white; padding: 3rem; border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); position: relative; z-index: 10;
+        }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 700; color: #2b2d42; }
+        .form-control {
+            width: 100%; padding: 12px 15px; border: 2px solid #eee; border-radius: 12px;
+            font-family: inherit; transition: 0.3s; font-size: 1rem;
+        }
+        .form-control:focus { border-color: #3a0ca3; outline: none; background: #f0f4ff; }
+        textarea.form-control { resize: vertical; min-height: 120px; }
+        
+        .btn-submit {
+            background: #3a0ca3; color: white; border: none; padding: 15px; border-radius: 12px;
+            font-weight: 800; cursor: pointer; width: 100%; transition: 0.3s;
+        }
+        .btn-submit:hover { background: #240090; transform: translateY(-2px); }
+        .btn-cancel {
+            display: flex; align-items: center; justify-content: center; background: #f8f9fa;
+            color: #6c757d; text-decoration: none; padding: 15px; border-radius: 12px;
+            font-weight: 700; width: 100%; transition: 0.3s;
+        }
+        .btn-cancel:hover { background: #e9ecef; color: #2b2d42; }
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 1rem; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">Activités<span>+</span></div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('admin_dashboard') }}">Tableau de Bord</a></li>
+            <li><a href="{{ url_for('logout') }}" style="color: var(--secondary); font-weight: 800;">Déconnexion</a></li>
+        </ul>
+    </nav>
+
+    <header class="page-header" style="padding-bottom: 100px; min-height: 280px; background: linear-gradient(135deg, #3a0ca3, #4cc9f0);">
+        <h1><i class="fas fa-edit"></i> Modifier Club</h1>
+        <p>Mise à jour : {{ club.NomClub }}</p>
+    </header>
+
+    <div class="form-container">
+        <form action="{{ url_for('modifier_club', id=club.CodeClub) }}" method="POST">
+            <div class="form-group">
+                <label for="nom">Nom du Club</label>
+                <input type="text" id="nom" name="nom" class="form-control" value="{{ club.NomClub }}" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                    <label for="type">Type / Catégorie</label>
+                    <input type="text" id="type" name="type" class="form-control" value="{{ club.TypeClub }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="date_creation">Date de Création</label>
+                    <input type="date" id="date_creation" name="date_creation" class="form-control" value="{{ club.DateCreation }}" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" class="form-control">{{ club.DescriptionC }}</textarea>
+            </div>
+
+            <div class="btn-group">
+                <a href="{{ url_for('gestion_clubs') }}" class="btn-cancel">Annuler</a>
+                <button type="submit" class="btn-submit">Enregistrer</button>
+            </div>
+        </form>
+    </div>
+
+    <footer><p>&copy; 2025 Activités+ ENSA Khouribga.</p></footer>
+</body>
+</html>

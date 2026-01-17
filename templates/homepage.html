@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activités+</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">Activités<span>+</span></div>
+        <ul class="nav-links">
+            <li><a href="#home" class="active">Accueil</a></li>
+            <li><a href="{{ url_for('clubs') }}">Nos Clubs</a></li>
+            <li><a href="{{ url_for('login') }}">S'inscrire</a></li>
+        </ul>
+    </nav>
+
+    <header id="home" class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <span class="badge-new">Nouveau semestre 2025</span>
+            <h1 class="hero-title">Développez votre potentiel à l'ENSAK</h1>
+            <p class="intro">
+                Rejoignez une communauté dynamique de futurs ingénieurs. Sport, entrepreneuriat, social et spiritualité : tout commence ici.
+            </p>
+            <div class="hero-buttons">
+                <a href="{{ url_for('clubs') }}" class="btn btn-primary">Découvrir les Clubs</a>
+                <a href="#features" class="btn btn-outline">En savoir plus</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="features" class="features-section">
+            <div class="section-header">
+                <h2>Vie Associative & Engagement</h2>
+                <div class="divider"></div>
+                <p>Découvrez les piliers de notre vie estudiantine</p>
+            </div>
+            
+            <div class="cards-grid">
+                <a href="{{ url_for('clubs') }}#jlm" class="feature-card">
+                    <div class="icon-box red"><i class="fas fa-hands-helping"></i></div>
+                    <h3>JLM ENSAK</h3>
+                    <p>Entrepreneuriat social et solidarité pour améliorer la qualité de vie.</p>
+                    <span class="read-more">Voir le club <i class="fas fa-chevron-right"></i></span>
+                </a>
+
+                <a href="{{ url_for('clubs') }}#enactus" class="feature-card">
+                    <div class="icon-box yellow"><i class="fas fa-lightbulb"></i></div>
+                    <h3>Enactus</h3>
+                    <p>L'innovation entrepreneuriale pour un progrès sociétal durable.</p>
+                    <span class="read-more">Voir le club <i class="fas fa-chevron-right"></i></span>
+                </a>
+
+                <a href="{{ url_for('clubs') }}#masjid" class="feature-card">
+                    <div class="icon-box teal"><i class="fas fa-mosque"></i></div>
+                    <h3>Comité Masjid</h3>
+                    <p>Développement personnel, éthique et esprit de communauté.</p>
+                    <span class="read-more">Voir le club <i class="fas fa-chevron-right"></i></span>
+                </a>
+
+                <a href="{{ url_for('clubs') }}#rotaract" class="feature-card">
+                    <div class="icon-box pink"><i class="fas fa-users"></i></div>
+                    <h3>Comité Rotaract</h3>
+                    <p>Engagement civique et développement communautaire.</p>
+                    <span class="read-more">Voir le club <i class="fas fa-chevron-right"></i></span>
+                </a>
+
+                <a href="{{ url_for('clubs') }}#esc" class="feature-card">
+                    <div class="icon-box blue"><i class="fas fa-futbol"></i></div>
+                    <h3>Comité Sportif</h3>
+                    <p>Promotion du sport et du bien-être au sein de l'ENSAK.</p>
+                    <span class="read-more">Voir le club <i class="fas fa-chevron-right"></i></span>
+                </a>
+            </div>
+        </section>
+
+        <section id="get-started" class="cta-section">
+            <div class="cta-inner">
+                <h2>Prêt à marquer l'histoire ?</h2>
+                <p>Rejoignez plus de 500 élèves ingénieurs déjà actifs dans la vie associative.</p>
+                <div class="cta-buttons">
+                    <a href="{{ url_for('login') }}" class="btn btn-light">Connectez-vous pour accéder à vos clubs</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="footer">
+        <div class="footer-bottom">
+            <p>&copy; 2025 Activités+ ENSA Khouribga. Tous droits réservés.</p>
+        </div>
+    </footer>
+</body>
+</html>

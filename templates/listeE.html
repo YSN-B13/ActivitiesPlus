@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} | Activités+</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Nunito+Sans:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/clubs.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Activités<span>+</span></div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('admin_dashboard') }}">Tableau de Bord</a></li>
+            <li><a href="{{ url_for('logout') }}" style="color: var(--secondary); font-weight: 800;">Déconnexion</a>
+            </li>
+        </ul>
+    </nav>
+
+    <header class="page-header" style="padding-bottom: 80px; min-height: 250px;">
+        <h1><i class="fas fa-user-graduate"></i> {{ title }}</h1>
+        <p>Liste complète des étudiants inscrits</p>
+    </header>
+
+    <div class="table-section" style="margin-top: -60px; position: relative; z-index: 10;">
+        <div class="table-container">
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <a href="{{ url_for('admin_dashboard') }}"
+                    style="text-decoration: none; color: #6c757d; font-weight: 700;">
+                    <i class="fas fa-arrow-left"></i> Retour
+                </a>
+                <button
+                    style="background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer;">
+                    <a href="{{ url_for('ajouter_etudiant') }}" style="text-decoration: none; color: white; font-weight: 700;">
+                        <i class="fas fa-plus"></i> Ajouter Étudiant
+                    </a>
+                </button>
+            </div>
+
+            {% if etudiants|length < 1 %} <p class="empty-state">Aucun étudiant trouvé.</p>
+                {% else %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom Complet</th>
+                            <th>Filière</th>
+                            <th>Contact</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for etudiant in etudiants %}
+                        <tr>
+                            <td>#{{ etudiant.CodeEtudiant }}</td>
+                            <td>
+                                <strong>{{ etudiant.Nom }} {{ etudiant.Prenom }}</strong><br>
+                                <span style="font-size: 0.8rem; color: #888;">Né le: {{ etudiant.DateNaissance }}</span>
+                            </td>
+                            <td><span class="tag" style="background-color: #3a0ca3;">{{ etudiant.Filiere }}</span></td>
+                            <td>
+                                {{ etudiant.Email }}<br>
+                                <span style="font-size: 0.8rem; color: #888;">{{ etudiant.Telephone }}</span>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('detail_etudiant', id=etudiant.CodeEtudiant) }}"
+                                    style="color: #2a9d8f; margin-right: 10px;" title="Voir le profil">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                <a href="{{ url_for('modifier_etudiant', id=etudiant.CodeEtudiant) }}"
+                                    style="color: #4361ee; margin-right: 10px;" title="Modifier">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+
+                                <a href="{{ url_for('supprimer_etudiant', id=etudiant.CodeEtudiant) }}"
+                                    style="color: #ef4444;" title="Supprimer"
+                                    onclick="return confirm('⚠️ Êtes-vous sûr de vouloir supprimer cet étudiant ?\n\nCette action effacera également ses inscriptions et participations.');">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Activités+ ENSA Khouribga. Tous droits réservés.</p>
+    </footer>
+
+</body>
+
+</html>

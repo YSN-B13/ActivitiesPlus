@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajouter Membre | {{ club.NomClub }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/clubs.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <style>
+        .form-container { max-width: 800px; margin: -60px auto 50px; background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); position: relative; z-index: 10; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 700; color: #2b2d42; }
+        .form-control { width: 100%; padding: 12px 15px; border: 2px solid #eee; border-radius: 12px; font-family: inherit; font-size: 1rem; }
+        .btn-submit { background: #f72585; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer; width: 100%; }
+        .btn-submit:hover { background: #d00060; }
+        .btn-cancel { display: flex; align-items: center; justify-content: center; background: #f8f9fa; color: #6c757d; text-decoration: none; padding: 15px; border-radius: 12px; font-weight: 700; width: 100%; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">Activités<span>+</span></div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('admin_dashboard') }}">Tableau de Bord</a></li>
+            <li><a href="{{ url_for('logout') }}" style="color: var(--secondary); font-weight: 800;">Déconnexion</a></li>
+        </ul>
+    </nav>
+
+    <header class="page-header" style="padding-bottom: 100px; min-height: 280px; background: linear-gradient(135deg, #f72585, #7209b7);">
+        <h1><i class="fas fa-user-plus"></i> Ajouter Membre</h1>
+        <p>Club : {{ club.NomClub }}</p>
+    </header>
+
+    <div class="form-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}" style="padding:15px; margin-bottom:20px; background:#eee; border-radius:10px;">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            
+            <div class="form-group">
+                <label>Sélectionner l'Étudiant</label>
+                <select name="etudiant_id" class="form-control" required>
+                    <option value="">-- Choisir --</option>
+                    {% for et in etudiants %}
+                        <option value="{{ et.CodeEtudiant }}">{{ et.Nom }} {{ et.Prenom }} (#{{ et.CodeEtudiant }}) - {{ et.Filiere }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                    <label>Type de participation</label>
+                    <input type="text" name="role" class="form-control" value="Participant" placeholder="Ex: Participant, Organisateur, Invité">
+                    <!-- <label>Rôle</label>
+                    <select name="role" class="form-control">
+                        <option value="Membre">Membre</option>
+                        <option value="Bureau">Membre du Bureau</option>
+                        <option value="President">Président</option>
+                        <option value="Secretaire">Secrétaire</option>
+                        <option value="Tresorier">Trésorier</option>
+                    </select> -->
+                </div>
+                <div class="form-group">
+                    <label>Statut</label>
+                    <select name="statut" class="form-control">
+                        <option value="valide">Valide (Actif)</option>
+                        <option value="En attente">En attente</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 2rem;">
+                <a href="{{ url_for('detail_club', id=club.CodeClub) }}" class="btn-cancel">Annuler</a>
+                <button type="submit" class="btn-submit">Ajouter au Club</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} | Activités+</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Nunito+Sans:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/clubs.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+
+    <style>
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: -60px auto 50px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .content-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            color: #3a0ca3;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #f0f4ff;
+            padding-bottom: 0.5rem;
+        }
+
+        .member-list {
+            list-style: none;
+        }
+
+        .member-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f8f9fa;
+        }
+
+        .tag-role {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: #e0e7ff;
+            color: #4361ee;
+            font-weight: 700;
+        }
+
+        .tag-president {
+            background: #fee2e2;
+            color: #ef4444;
+        }
+
+        @media (max-width: 900px) {
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">Activités<span>+</span></div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('admin_dashboard') }}">Tableau de Bord</a></li>
+            <li><a href="{{ url_for('logout') }}" style="color: var(--secondary); font-weight: 800;">Déconnexion</a>
+            </li>
+        </ul>
+    </nav>
+
+    <header class="page-header"
+        style="padding-bottom: 100px; min-height: 280px; background: linear-gradient(135deg, #111, #4361ee);">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between;">
+            <div>
+                <h1><i class="fas fa-users-cog"></i> {{ club.NomClub }}</h1>
+                <p>Gestion et détails du club</p>
+            </div>
+            <a href="{{ url_for('gestion_clubs') }}"
+                style="background: rgba(255,255,255,0.2); color: white; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; height: fit-content;">
+                <i class="fas fa-arrow-left"></i> Retour
+            </a>
+        </div>
+    </header>
+
+    <div class="detail-grid">
+
+        <main>
+            <div class="content-card">
+                <h3 class="section-title"><i class="fas fa-info-circle"></i> À propos</h3>
+                <p style="color: #666; line-height: 1.8;">{{ club.DescriptionC }}</p>
+                <div style="margin-top: 1rem; font-size: 0.9rem; color: #888;">
+                    <i class="far fa-calendar-alt"></i> Créé le: {{ club.DateCreation.strftime('%d/%m/%Y') }}
+                </div>
+            </div>
+
+            <div class="content-card">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f0f4ff; margin-bottom: 1rem; padding-bottom: 0.5rem;">
+                    <h3 class="section-title" style="border:none; margin:0;"><i class="fas fa-user-graduate"></i>
+                        Membres Inscrits ({{ inscriptions|length }})</h3>
+
+                    <a href="{{ url_for('ajouter_membre_club', club_id=club.CodeClub) }}"
+                        style="background: #f72585; color: white; padding: 5px 15px; border-radius: 8px; font-size: 0.8rem; font-weight: bold; text-decoration: none;">
+                        <i class="fas fa-plus"></i> Ajouter
+                    </a>
+                </div>
+
+                {% if inscriptions|length < 1 %} <p class="empty-state">Aucun membre inscrit.</p>
+                    {% else %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Étudiant</th>
+                                <th>Rôle</th>
+                                <th>Statut</th>
+                                <th style="text-align: right;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ins in inscriptions %}
+                            <tr>
+                                <td>
+                                    <strong>{{ ins.etudiant.Nom }} {{ ins.etudiant.Prenom }}</strong>
+                                    <br><span style="font-size:0.75rem; color:#888;">#{{ ins.etudiant.CodeEtudiant
+                                        }}</span>
+                                </td>
+                                <td>
+                                    {% if ins.TypeMembre == 'President' %}
+                                    <span class="tag-role tag-president">{{ ins.TypeMembre}}</span>
+                                    {% else %}
+                                    <span class="tag-role">{{ ins.TypeMembre}}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if ins.Statut == 'valide' %}
+                                    <i class="fas fa-check-circle" style="color: #10b981;"></i> Valide
+                                    {% else %}
+                                    <i class="fas fa-clock" style="color: #f59e0b;"></i> En attente
+                                    <a href="{{ url_for('valider_inscription', et_id=ins.CodeEtudiant, cl_id=club.CodeClub) }}"
+                                        title="Valider"><i class="fas fa-check"
+                                            style="color:#10b981; margin-left:5px;"></i></a>
+                                    {% endif %}
+                                </td>
+                                <td style="text-align: right;">
+                                    <a href="{{ url_for('supprimer_membre_club', club_id=club.CodeClub, et_id=ins.CodeEtudiant) }}"
+                                        onclick="return confirm('Retirer ce membre du club ?');"
+                                        style="color: #ef4444; text-decoration: none;" title="Retirer">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
+            </div>
+        </main>
+
+        <aside>
+            <div class="content-card" style="text-align: center;">
+                <a href="{{ url_for('modifier_club', id=club.CodeClub) }}"
+                    style="display: block; background: #4361ee; color: white; padding: 12px; border-radius: 8px; font-weight: 700; text-decoration: none; margin-bottom: 10px;">
+                    <i class="fas fa-edit"></i> Modifier Infos
+                </a>
+                <a href="{{ url_for('supprimer_club', id=club.CodeClub) }}"
+                    onclick="return confirm('⚠️ Êtes-vous sûr ? Tout l\'historique du club sera effacé !');"
+                    style="display: block; background: #fee2e2; color: #ef4444; padding: 12px; border-radius: 8px; font-weight: 700; text-decoration: none;">
+                    <i class="fas fa-trash"></i> Supprimer Club
+                </a>
+            </div>
+
+            <div class="content-card">
+                <h3 class="section-title"><i class="fas fa-bolt"></i> Activités</h3>
+                {% if activites|length < 1 %} <p style="font-size: 0.9rem; color: #aaa; font-style: italic;">Aucune
+                    activité.</p>
+                    {% else %}
+                    <ul class="member-list">
+                        {% for act in activites %}
+                        <li class="member-item">
+                            <span><strong>{{ act.IntituleC }}</strong></span>
+                            <span style="font-size: 0.8rem; color: #888;">{{ act.DateActiviteC.strftime('%d/%m')
+                                }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+            </div>
+
+            <div class="content-card">
+                <h3 class="section-title"><i class="fas fa-hand-holding-usd"></i> Sponsors</h3>
+                {% if sponsors|length < 1 %} <p style="font-size: 0.9rem; color: #aaa; font-style: italic;">Aucun
+                    sponsor.</p>
+                    {% else %}
+                    <ul class="member-list">
+                        {% for sp in sponsors %}
+                        <li class="member-item">
+                            <span>{{ sp.NomSponsor }}</span>
+                            <span style="color: #10b981; font-weight: 700;">{{ sp.Contribution }} DH</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+            </div>
+        </aside>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Activités+ ENSA Khouribga.</p>
+    </footer>
+</body>
+
+</html>

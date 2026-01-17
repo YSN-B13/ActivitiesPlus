@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} | Activités+</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/clubs.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+
+    <style>
+        /* Reusing Form Styles from Admin Dashboard */
+        .form-container {
+            max-width: 800px;
+            margin: -60px auto 50px;
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            color: #2b2d42;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            font-family: inherit;
+            transition: 0.3s;
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            border-color: #4361ee;
+            outline: none;
+            background: #f0f4ff;
+        }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 1rem;
+        }
+
+        .btn-submit {
+            background: #4361ee;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.3s;
+        }
+
+        .btn-submit:hover {
+            background: #3a0ca3;
+            transform: translateY(-2px);
+        }
+
+        .btn-cancel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+            color: #6c757d;
+            text-decoration: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: 700;
+            width: 100%;
+            transition: 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .btn-cancel:hover {
+            background: #e9ecef;
+            color: #2b2d42;
+        }
+
+        /* Flash Messages */
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .alert-success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+        .alert-error { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+
+        @media (max-width: 768px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .btn-group { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Activités<span>+</span></div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('admin_dashboard') }}">Tableau de Bord</a></li>
+            <li><a href="{{ url_for('logout') }}" style="color: var(--secondary); font-weight: 800;">Déconnexion</a></li>
+        </ul>
+    </nav>
+
+    <header class="page-header" style="padding-bottom: 100px; min-height: 280px; background: linear-gradient(135deg, #4cc9f0, #4361ee);">
+        <h1><i class="fas fa-user-plus"></i> Ajouter un Étudiant</h1>
+        <p>Créer un nouveau profil étudiant dans le système</p>
+    </header>
+
+    <div class="form-container">
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        <i class="fas fa-info-circle"></i> {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('ajouter_etudiant') }}" method="POST">
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="nom">Nom</label>
+                    <input type="text" id="nom" name="nom" class="form-control" placeholder="Entrez le nom" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="prenom">Prénom</label>
+                    <input type="text" id="prenom" name="prenom" class="form-control" placeholder="Entrez le prénom" required>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="filiere">Filière</label>
+                    <input type="text" id="filiere" name="filiere" class="form-control" placeholder="Ex: Génie Informatique" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="date_naissance">Date de Naissance</label>
+                    <input type="date" id="date_naissance" name="date_naissance" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="email">Email Académique</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="etudiant@ensa.ma" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="telephone">Numéro de Téléphone</label>
+                    <input type="text" id="telephone" name="telephone" class="form-control" placeholder="+212 6..." required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="mot_de_passe">Mot de Passe Provisoire</label>
+                <div style="position: relative;">
+                    <input type="text" id="mot_de_passe" name="mot_de_passe" class="form-control" placeholder="Définir un mot de passe" required>
+                    <i class="fas fa-key" style="position: absolute; right: 15px; top: 15px; color: #adb5bd;"></i>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <a href="{{ url_for('gestion_etudiants') }}" class="btn-cancel">
+                    Annuler
+                </a>
+                <button type="submit" class="btn-submit">
+                    Ajouter l'étudiant
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Activités+ ENSA Khouribga. Tous droits réservés.</p>
+    </footer>
+
+</body>
+</html>

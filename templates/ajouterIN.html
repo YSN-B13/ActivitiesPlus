@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }} | Activités+</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/clubs.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+
+    <style>
+        .form-container { max-width: 800px; margin: -60px auto 50px; background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); position: relative; z-index: 10; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 700; color: #2b2d42; }
+        .form-control { width: 100%; padding: 12px 15px; border: 2px solid #eee; border-radius: 12px; font-family: inherit; font-size: 1rem; }
+        .btn-submit { background: #7209b7; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer; width: 100%; }
+        .btn-submit:hover { background: #560bad; }
+        .btn-cancel { display: flex; align-items: center; justify-content: center; background: #f8f9fa; color: #6c757d; text-decoration: none; padding: 15px; border-radius: 12px; font-weight: 700; width: 100%; }
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 2rem; }
+
+        /* NEW STYLE FOR CHECKBOX LIST */
+        .checkbox-container {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            padding: 10px;
+            background: #f9f9f9;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        .checkbox-item:last-child { border-bottom: none; }
+        .checkbox-item input { margin-right: 10px; width: 18px; height: 18px; accent-color: #7209b7; }
+        .checkbox-label strong { color: #4361ee; }
+        .checkbox-label span { font-size: 0.85rem; color: #666; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Activités<span>+</span></div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('admin_dashboard') }}">Tableau de Bord</a></li>
+            <li><a href="{{ url_for('logout') }}" style="color: var(--secondary); font-weight: 800;">Déconnexion</a></li>
+        </ul>
+    </nav>
+
+    <header class="page-header" style="padding-bottom: 100px; min-height: 280px; background: linear-gradient(135deg, #7209b7, #b5179e);">
+        <h1><i class="fas fa-plus-circle"></i> Ajouter Intervenant</h1>
+    </header>
+
+    <div class="form-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}" style="padding:15px; margin-bottom:20px; background:#eee; border-radius:10px;">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('ajouter_intervenant') }}" method="POST">
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                    <label for="nom">Nom</label>
+                    <input type="text" id="nom" name="nom" class="form-control" placeholder="Nom de famille" required>
+                </div>
+                <div class="form-group">
+                    <label for="prenom">Prénom</label>
+                    <input type="text" id="prenom" name="prenom" class="form-control" placeholder="Prénom" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="specialite">Spécialité / Expertise</label>
+                <input type="text" id="specialite" name="specialite" class="form-control" placeholder="Ex: IA, Blockchain..." required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="contact@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="telephone">Téléphone</label>
+                    <input type="text" id="telephone" name="telephone" class="form-control" placeholder="+212 6..." required>
+                </div>
+            </div>
+
+            <hr style="border: 0; border-top: 2px dashed #eee; margin: 2rem 0;">
+            
+            <div class="form-group">
+                <label><i class="fas fa-tasks"></i> Affecter à des Activités (Événements)</label>
+                <p style="font-size: 0.85rem; color: #888; margin-bottom: 10px;">Cochez les activités où cet intervenant sera présent :</p>
+                
+                <div class="checkbox-container">
+                    {% if activites_list|length < 1 %}
+                        <p style="text-align:center; padding:20px; color:#aaa;">Aucune activité d'événement disponible.</p>
+                    {% else %}
+                        {% for act in activites_list %}
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="act_{{ act.CodeActiviteE }}" name="activites" value="{{ act.CodeActiviteE }}">
+                            <label for="act_{{ act.CodeActiviteE }}" class="checkbox-label">
+                                <strong>{{ act.evenement.NomEvent }}</strong> : {{ act.IntituleE }}
+                                <br><span>Type: {{ act.TypeActiviteE }} • Date: {{ act.DateActiviteE.strftime('%d/%m %H:%M') }}</span>
+                            </label>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <a href="{{ url_for('gestion_intervenants') }}" class="btn-cancel">Annuler</a>
+                <button type="submit" class="btn-submit">Ajouter & Affecter</button>
+            </div>
+
+        </form>
+    </div>
+    
+    <footer><p>&copy; 2025 Activités+ ENSA Khouribga.</p></footer>
+</body>
+</html>
